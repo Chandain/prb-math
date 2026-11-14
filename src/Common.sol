@@ -447,7 +447,7 @@ function mulDiv(uint256 x, uint256 y, uint256 denominator) pure returns (uint256
     }
 
     // Handle non-overflow cases, 256 by 256 division.
-    if (prod1 == 0) {
+    if (prod1 == 0 || denominator == 0) {
         unchecked {
             return prod0 / denominator;
         }

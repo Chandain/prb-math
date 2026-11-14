@@ -6,26 +6,20 @@ import { stdError } from "forge-std/src/StdError.sol";
 import { mulDiv, PRBMath_MulDiv_Overflow } from "../src/Common.sol";
 
 contract mulDivFuzzTest is Test {
-
     function callMulDiv(uint256 x, uint256 y, uint256 denominator) external pure returns (uint256) {
         return mulDiv(x, y, denominator);
     }
 
-
     function testFuzz_mulDiv_zeroDenominator(uint128 x, uint128 y) public {
-
         vm.expectRevert(stdError.divisionError);
         this.callMulDiv(x, y, 0);
     }
 
-
     function testFuzz_mulDiv_overflow(uint256 _x, uint256 _y) public {
-
-        uint256 x = bound(_x, 2**128, type(uint256).max);
-        uint256 y = bound(_y, 2**128, type(uint256).max);
+        uint256 x = bound(_x, 2 ** 128, type(uint256).max);
+        uint256 y = bound(_y, 2 ** 128, type(uint256).max);
 
         vm.expectRevert(abi.encodeWithSelector(PRBMath_MulDiv_Overflow.selector, x, y, 0));
         this.callMulDiv(x, y, 0);
     }
-
 }
