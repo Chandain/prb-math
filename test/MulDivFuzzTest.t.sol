@@ -10,7 +10,7 @@ contract mulDivFuzzTest is Test {
         return mulDiv(x, y, denominator);
     }
 
-    function testFuzz_mulDiv_zeroDenominator(uint128 x, uint128 y) public {
+    function testFuzz_mulDiv_zeroDenominator(uint256 x, uint256 y) public {
         vm.expectRevert(stdError.divisionError);
         this.callMulDiv(x, y, 0);
     }
@@ -19,7 +19,8 @@ contract mulDivFuzzTest is Test {
         uint256 x = bound(_x, 2 ** 128, type(uint256).max);
         uint256 y = bound(_y, 2 ** 128, type(uint256).max);
 
-        vm.expectRevert(abi.encodeWithSelector(PRBMath_MulDiv_Overflow.selector, x, y, 0));
-        this.callMulDiv(x, y, 0);
+        // The product is at least 2^256, so division by one must overflow uint256.
+        vm.expectRevert(abi.encodeWithSelector(PRBMath_MulDiv_Overflow.selector, x, y, 1));
+        this.callMulDiv(x, y, 1);
     }
 }
